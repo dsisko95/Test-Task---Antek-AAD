@@ -1,0 +1,42 @@
+<form fxLayout="column" fxLayoutAlign="center center" id="form" [formGroup]="contactForm" (ngSubmit)="addContact()">
+  <mat-form-field>
+    <input matInput placeholder="Contact name" formControlName="name" #inputName>
+    <mat-icon matSuffix>supervised_user_circle</mat-icon>
+    <mat-hint align="start">
+      <strong *ngIf="contactForm.hasError('required', 'name' ) && contactForm.get('name').touched">Please
+        enter contact name</strong>
+      <strong *ngIf="contactForm.hasError('usernameTaken', 'name' )">
+        Contact name already taken! Please select another one
+      </strong>
+    </mat-hint>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Email" formControlName="email">
+    <mat-icon matSuffix>email</mat-icon>
+    <mat-hint align="start" *ngIf="!contactForm.get('email').valid && contactForm.get('email').touched"><strong>Email
+        field should have valid pattern</strong> </mat-hint>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Phone Number" placeholder="xxx-xxxxxxx" formControlName="number">
+    <mat-icon matSuffix>phone</mat-icon>
+    <mat-hint align="start" *ngIf="!contactForm.get('number').valid && contactForm.get('number').touched"><strong>Number
+        should match the pattern</strong> </mat-hint>
+  </mat-form-field>
+  <div id="tags" formArrayName="tags">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <p>Tags</p>
+      <button mat-button (click)="addTag($event)" color="primary">Add tag</button>
+    </div>
+    <div *ngFor="let tagControl of contactForm.get('tags').controls; let i = index">
+      <mat-form-field>
+        <input matInput placeholder="Tag name" [formControlName]="i">
+      </mat-form-field>
+    </div>
+    <span *ngIf="tagCounter === 2" id="task-err">Maximum number of tags is 2</span>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center" id="action">
+    <button mat-button (click)="onNoClick($event)">Close</button>
+    <button mat-raised-button color="primary" [disabled]="contactForm.invalid">Save</button>
+  </div>
+
+</form>

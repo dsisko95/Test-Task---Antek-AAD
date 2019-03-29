@@ -1,0 +1,52 @@
+form {
+  width: 90%;
+  height: 100%;
+  margin: auto;
+
+  .mat-form-field {
+    width: 80%;
+    font-size: .95rem;
+  }
+
+  #tags {
+    width: 80%;
+    font-size: .95rem;
+    margin-top: 1rem;
+
+    .mat-form-field {
+      width: 100%;
+    }
+
+    #task-err {
+      font-size: .95rem;
+    }
+  }
+
+  #action {
+    width: 80%;
+    margin: 1rem 0;
+  }
+
+  button {
+    width: 30%;
+  }
+}
+
+// media query
+@media screen and (max-width: 599px) {
+  form {
+    width: 100%;
+
+    .mat-form-field {
+      width: 100%;
+    }
+
+    #tags {
+      width: 100%;
+    }
+
+    #action {
+      width: 100%;
+    }
+  }
+}

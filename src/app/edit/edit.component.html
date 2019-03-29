@@ -1,0 +1,26 @@
+<div fxLayout="row" fxLayout.xs="column" id="action-content">
+  <span class="material-icons toggle-remove" matTooltip="Go back" matTooltipPosition="right"
+    (click)="goBack()">keyboard_arrow_left</span>
+</div>
+<div fxLayout="row" id="main-content">
+  <div fxFlex="100%" id="entry">
+    <span class="helper">Contact name</span>
+    <p>{{ (contact$ | async)?.name }}</p>
+    <span class="helper">Email</span>
+    <p>{{ (contact$ | async)?.email }}</p>
+    <span class="helper">Phone</span>
+    <p>+ {{ (contact$ | async)?.number }}</p>
+    <span class="helper">Tags</span>
+    <div id="tags">
+      <mat-chip-list aria-label="Tags">
+        <mat-chip *ngFor="let tag of (contact$ | async)?.tags">{{tag}}</mat-chip>
+        <p *ngIf="(contact$ | async)?.tags.length === 0" id="tag-info">No tags choosen</p>
+      </mat-chip-list>
+    </div>
+    <h4>Actions</h4>
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px" id="action">
+      <span class="material-icons info" matTooltip="Delete contact" (click)="deleteContact()">delete</span>
+      <span class="material-icons info" matTooltip="Edit contact" (click)="openDialog()">edit</span>
+    </div>
+  </div>
+</div>

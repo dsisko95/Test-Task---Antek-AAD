@@ -1,0 +1,67 @@
+@import '../../variables';
+
+#action-content {
+  height: 10%;
+  padding-bottom: 1rem;
+
+  .full-width-input {
+    width: 90%;
+    font-size: .9rem;
+  }
+
+  // add material icon style
+  #add-icon {
+    color: $primary-color;
+    font-weight: 600;
+  }
+}
+
+#main-content {
+  height: 90%;
+  max-height: 90%;
+  padding-top: 1rem;
+
+  // left side of phone book
+  #entry {
+    overflow-y: scroll;
+
+    >div {
+      .letter-section-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: black;
+      }
+
+      >div {
+        height: auto;
+        padding: .5rem;
+
+        .phone-number {
+          font-size: .9rem;
+        }
+
+        .info {
+          padding-right: 10px;
+          color: #9E9E9E;
+        }
+      }
+    }
+
+    #results {
+      font-size: .85rem;
+      text-align: right;
+      margin-right: 10px;
+    }
+
+  }
+
+}
+
+// media query
+@media screen and (max-width: 599px) {
+  #action-content {
+    .full-width-input {
+      width: 100%;
+    }
+  }
+}
