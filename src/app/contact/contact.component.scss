@@ -1,8 +1,8 @@
 @import '../../variables';
 
 #action-content {
-  height: 10%;
   padding-bottom: 1rem;
+  position: relative;
 
   .full-width-input {
     width: 90%;
@@ -14,14 +14,31 @@
     color: $primary-color;
     font-weight: 600;
   }
+
+  &:before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 1px;
+    background: $hr-color;
+    left: -2rem;
+    top: 100%;
+  }
+
+}
+
+#results {
+  font-size: .85rem;
+  text-align: right;
+  margin-right: 10px;
+  padding-top: 1rem;
 }
 
 #main-content {
-  height: 90%;
-  max-height: 90%;
-  padding-top: 1rem;
+  padding: 1rem 0;
+  height: 410px;
 
-  // left side of phone book
   #entry {
     overflow-y: scroll;
 
@@ -45,12 +62,6 @@
           color: #9E9E9E;
         }
       }
-    }
-
-    #results {
-      font-size: .85rem;
-      text-align: right;
-      margin-right: 10px;
     }
 
   }

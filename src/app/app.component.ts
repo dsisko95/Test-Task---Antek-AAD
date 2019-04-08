@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AnimationService } from './shared/set-animation.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs';
+import { HttpDataService } from './shared/http-data.service';
 
 @Component({
   selector: 'app-root',
@@ -25,17 +26,19 @@ export class AppComponent implements OnInit, OnDestroy {
   matState: string;
   subscription: Subscription = new Subscription();
 
-  constructor(private animationService: AnimationService) { }
+  constructor(private animationService: AnimationService, private httpService: HttpDataService) { }
 
   ngOnInit() {
     this.subscription = this.animationService.getAnimationState()
       .subscribe(data => {
         this.matState = data;
-      })
+      });
+    this.httpService.getContacts();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.httpService.subscription.unsubscribe();
   }
 
 }

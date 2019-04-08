@@ -17,7 +17,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   contactForm: FormGroup;
   tagCounter: number = 0;
   contact: any;
-  subscription: Subscription = new Subscription();
+  subscription: Array<Subscription> = new Array<Subscription>();
 
   constructor(public dialogRef: MatDialogRef<DialogComponent>,
     private formBuilder: FormBuilder,
@@ -29,6 +29,7 @@ export class DialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.contactForm = this.formBuilder.group({
+      'id': [null],
       'name': [null, [Validators.required]],
       'email': [null, [Validators.required, Validators.email]],
       'number': [null, [Validators.required, Validators.pattern(/^\d\d\d-\d{7}$/)]],
@@ -36,8 +37,8 @@ export class DialogComponent implements OnInit, OnDestroy {
     })
 
     // get dialog data obj
-    this.subscription = this.data.subscribe(data => {
-      if (!data.name) {
+    this.subscription.push(this.data.subscribe(data => {
+      if (!data) {
         // set async validator
         this.contactForm.controls['name'].setAsyncValidators(ValidateUsername.createValidator(this.httpService));
         return;
@@ -45,6 +46,7 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.contact = data;
       this.contact.editState = true;
       this.contactForm.patchValue({
+        'id': this.contact.id,
         'name': this.contact.name,
         'email': this.contact.email,
         'number': this.contact.number
@@ -56,11 +58,11 @@ export class DialogComponent implements OnInit, OnDestroy {
         this.tagCounter += 1;
       })
 
-    })
+    }));
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription.forEach(subscription => subscription.unsubscribe());
   }
 
   onNoClick(e: Event): void {
@@ -80,31 +82,30 @@ export class DialogComponent implements OnInit, OnDestroy {
       // add state
       if (this.contact === undefined || !this.contact.editState) {
         this.spinner.show();
-        this.httpService.insertContact(this.contactForm.value)
-          .subscribe(_ => {
-            // pass data from dialog to component
-            this.data = { state: true };
-            this.dialogRef.close(this.data);
+        this.subscription.push(this.httpService.insertContact(this.contactForm.value)
+          .subscribe(data => {
+            this.httpService.contacts.push(data);
+            this.httpService.fetchContacts();
+            this.dialogRef.close();
             setTimeout(() => {
               this.spinner.hide();
             }, 500);
             this.snackbarService.openSnackBar('Successfully added', 3000);
-          });
+          }));
       }
       // edit state
       else {
         this.spinner.show();
-        const control = new FormControl(this.contact.id);
-        this.contactForm.addControl('id', control);
-        this.httpService.editContact(this.contactForm.value)
+        this.subscription.push(this.httpService.editContact(this.contactForm.value)
           .subscribe(_ => {
-            this.data = { state: true };
+            this.data = { ...this.contactForm.value };
             this.dialogRef.close(this.data);
             setTimeout(() => {
               this.spinner.hide();
             }, 500);
             this.snackbarService.openSnackBar('Successfully edited', 3000);
-          })
+          }));
+
       }
     }
   }

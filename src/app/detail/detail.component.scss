@@ -1,0 +1,45 @@
+@import '../../variables';
+
+#action-content {
+  height: 10%;
+  padding-bottom: 1rem;
+}
+
+#main-content {
+  height: 90%;
+  max-height: 90%;
+
+  #entry {
+    margin-top: 1rem;
+    #tags {
+      margin-top: .4rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid $hr-color;
+
+      #tag-info {
+        font-size: .8rem;
+        padding-left: .4rem;
+      }
+    }
+
+    .helper {
+      font-size: .8rem;
+      display: inline-block;
+
+      &:not(:first-child) {
+        margin-top: .4rem;
+      }
+    }
+  }
+
+  h4 {
+    padding-top: 1rem;
+  }
+
+  #action {
+    span:first-child {
+      color: $delete-bin;
+    }
+  }
+
+}

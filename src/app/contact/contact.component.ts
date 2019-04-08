@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpDataService } from '../shared/http-data.service';
-import { Observable, of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { IContact } from '../db_model/contact';
 import { DialogOpenerService } from '../shared/dialog.opener.service';
 import { DialogComponent } from '../dialog/dialog.component';
@@ -12,29 +12,32 @@ import { AnimationService } from '../shared/set-animation.service';
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
 
-  contacts$: Observable<IContact[]>;
+  contacts: Array<IContact>;
   searchString: string = '';
+  subscription: Subscription = new Subscription();
+  togglePanel: boolean = false;
 
   constructor(private httpService: HttpDataService,
     private dialog: DialogOpenerService,
     private router: Router,
-    private animationService: AnimationService ) { }
+    private animationService: AnimationService) { }
 
   ngOnInit() {
-    this.contacts$ = this.httpService.getContacts();
+    this.subscription = this.httpService.contactsSubject
+      .subscribe(data => {
+        this.contacts = data;
+      })
+    this.httpService.fetchContacts();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.openDialog(DialogComponent, of({}));
-    dialogRef.afterClosed().subscribe(data => {
-      // fetch data from server only when from is submitted
-      data === undefined ? {} : data['state'];
-      if (data) {
-        this.contacts$ = this.httpService.getContacts();
-      }
-    });
+    const dialogRef = this.dialog.openDialog(DialogComponent, of(null));
   }
 
   searchedName(e: any): void {
@@ -44,6 +47,11 @@ export class ContactComponent implements OnInit {
   editContact(id: string): void {
     this.animationService.setMinimizedState();
     this.router.navigate(['details/', id]);
+    this.httpService.allowDetails.next(true);
+  }
+
+  togglePanelState(): void {
+    this.togglePanel = !this.togglePanel;
   }
 
 }

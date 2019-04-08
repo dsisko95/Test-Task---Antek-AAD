@@ -1,24 +1,22 @@
 <div fxLayout="row" fxLayout.xs="column" id="action-content">
-  <div id="front-action" fxLayout="row" fxLayoutAlign="space-between center" fxFlex>
-    <span class="material-icons" matTooltip="Search for a contact" matTooltipPosition="right"
-      appSearchContact>search</span>
+  <div id="front-action" fxLayout="row" fxLayoutAlign="space-between center" fxFlex [fxHide]="togglePanel">
+    <span class="material-icons" matTooltip="Search for a contact" matTooltipPosition="right" (click)="togglePanelState()">search</span>
     <span class="material-icons" matTooltip="Add new entry" matTooltipPosition="left" (click)="openDialog()"
       id="add-icon">add</span>
   </div>
   <div id="behind-action" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center"
-    fxLayoutAlign.xs="space-between start" fxFlex fxHide="true">
-    <span class="material-icons toggle-remove" matTooltip="Go back" matTooltipPosition="right" id="keyboard-icon"
-      appGoBack>keyboard_arrow_left</span>
-    <mat-form-field class="full-width-input toggle-remove">
+    fxLayoutAlign.xs="space-between start" fxFlex [fxHide]="!togglePanel">
+    <span class="material-icons toggle-remove" matTooltip="Go back" matTooltipPosition="right"
+      id="keyboard-icon" (click)="togglePanelState(input)">keyboard_arrow_left</span>
+    <mat-form-field class="full-width-input">
       <input matInput placeholder="Search name" (keyup)="searchedName($event)" autofocus>
     </mat-form-field>
   </div>
 </div>
+<p id="results" *ngIf="contacts">{{ (contacts | searchContacts: searchString)?.length }} results</p>
 <div fxLayout="row" id="main-content">
   <div fxFlex="100%" id="entry">
-    <p id="results" *ngIf="contacts$ | async">{{ (contacts$ | async | searchContacts: searchString)?.length }}
-      results</p>
-    <div *ngFor="let contact of contacts$ | async | searchContacts: searchString">
+    <div *ngFor="let contact of contacts | searchContacts: searchString">
       <span class="letter-section-name"
         *ngIf="contact.category === undefined">{{ contact.name.charAt(0) | uppercase}}</span>
       <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -27,7 +25,8 @@
           <p class="phone-number">+ {{contact.number}}</p>
         </div>
         <div>
-          <span class="material-icons info" matTooltip="Details" matTooltipPosition="left" (click)="editContact(contact.id)">info</span>
+          <span class="material-icons info" matTooltip="Details" matTooltipPosition="left"
+            (click)="editContact(contact.id)">info</span>
         </div>
       </div>
     </div>

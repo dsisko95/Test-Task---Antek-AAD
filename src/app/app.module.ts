@@ -6,8 +6,6 @@ import { ContactComponent } from './contact/contact.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './shared/angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { SearchContactDirective } from './search-contact.directive';
-import { GoBackDirective } from './go-back.directive';
 import { SearchContactsPipe } from './search-contacts.pipe';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgProgressModule } from '@ngx-progressbar/core';
@@ -16,18 +14,16 @@ import { HttpErrorInterceptor } from './shared/http-error.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MAT_DIALOG_DATA } from '@angular/material';
-import { EditComponent } from './edit/edit.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { DetailComponent } from './detail/detail.component';
 @NgModule({
   declarations: [
     AppComponent,
     ContactComponent,
-    SearchContactDirective,
-    GoBackDirective,
     SearchContactsPipe,
     DialogComponent,
-    EditComponent,
+    DetailComponent,
     NotFoundComponent
   ],
   imports: [
